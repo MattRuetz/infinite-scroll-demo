@@ -2,7 +2,7 @@ const postsContainer = document.getElementById('posts-container');
 const loading = document.querySelector('.loader');
 const filter = document.getElementById('filter');
 
-let limit = 3;
+let limit = 5;
 let page = 1;
 
 const getPosts = async () => {
@@ -31,4 +31,31 @@ const showPosts = async () => {
     });
 };
 
+// Show loader animation and fetch more posts
+const showLoading = () => {
+    loading.classList.add('show');
+
+    setTimeout(() => {
+        loading.classList.remove('show');
+
+        setTimeout(() => {
+            page++;
+            showPosts();
+        }, 300);
+    }, 500);
+};
+
+// On load
 showPosts();
+showLoading();
+
+window.addEventListener('scroll', () => {
+    const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+
+    console.log(scrollTop, scrollHeight, clientHeight);
+
+    // If scroll is about to reach the bottom of the DOM scrollable window
+    if (scrollTop + clientHeight >= scrollHeight - 5) {
+        showLoading();
+    }
+});
